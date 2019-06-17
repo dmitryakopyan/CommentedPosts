@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CommentedPosts.Models;
+using CommentedPosts.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,6 +31,13 @@ namespace CommentedPosts
 
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+			services.AddScoped<IPostsRepository, PostsRepository>();
+
+			services.AddEntityFrameworkSqlServer()
+				.AddDbContext<CommentedPostsDbContext>
+
+				(option => option.UseSqlServer(Configuration["database:connection"]));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +52,7 @@ namespace CommentedPosts
 				app.UseExceptionHandler("/Home/Error");
 				app.UseHsts();
 			}
-
+			app.UseAuthentication();
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
