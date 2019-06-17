@@ -17,7 +17,7 @@ namespace CommentedPosts.Repositories
 		}
 
 		// GET api/students
-		public IEnumerable<Post> Index()
+		public IEnumerable<Post> GetAll()
 		{
 			return context.Posts.ToList();
 		}

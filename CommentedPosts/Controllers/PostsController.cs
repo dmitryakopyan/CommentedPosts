@@ -15,41 +15,20 @@ namespace CommentedPosts.Controllers
 
 		// GET api/posts
 		[HttpGet]
-		public IActionResult Index()
+		[Route("")]
+		public IActionResult GetAll()
 		{
-			var posts = postsRepository.Index();
-			return View(posts);
-		}
-
-		// GET api/posts
-		[HttpGet]
-		public IActionResult Create()
-		{
-			return View();
-		}
-
-		// GET api/posts
-		[HttpGet]
-		public IActionResult Details(int id)
-		{
-			var student = this.postsRepository.Get(id);
-			return View(student);
-		}
-
-		// GET api/posts
-		[HttpGet]
-		public IActionResult Edit(int id)
-		{
-			var student = this.postsRepository.Get(id);
-			return View(student);
+			var posts = postsRepository.GetAll();
+			return Ok(posts);
 		}
 
 		// GET api/posts/5
 		[HttpGet]
+		[Route("item")]
 		public IActionResult Get(int id)
 		{
-			var student = this.postsRepository.Get(id);
-			return student == null ? (IActionResult)NotFound() : Ok(student);
+			var post = this.postsRepository.Get(id);
+			return post == null ? (IActionResult)NotFound() : Ok(post);
 		}
 
 		// POST api/posts
@@ -58,7 +37,7 @@ namespace CommentedPosts.Controllers
 		{
 			var result = this.postsRepository.Post(post);
 
-			return RedirectToAction("Index");
+			return Ok(result);
 		}
 
 		// PUT api/posts/5
@@ -67,7 +46,7 @@ namespace CommentedPosts.Controllers
 		{
 			this.postsRepository.Put(id, post);
 
-			return RedirectToAction("Index");
+			return Ok();
 		}
 
 		// DELETE api/posts/5
@@ -75,7 +54,7 @@ namespace CommentedPosts.Controllers
 		{
 			this.postsRepository.Delete(id);
 
-			return RedirectToAction("Index");
+			return Ok();
 		}
 	}
 }

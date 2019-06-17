@@ -6,7 +6,7 @@ namespace CommentedPosts.Repositories
 {
 	public interface IPostsRepository
 	{
-		IEnumerable<Post> Index();
+		IEnumerable<Post> GetAll();
 		Post Get(int id);
 		int Post([FromBody]Post post);
 		void Put(int id, [FromBody]Post post);
