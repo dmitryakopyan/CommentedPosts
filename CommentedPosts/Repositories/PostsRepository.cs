@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommentedPosts.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommentedPosts.Repositories
 {
@@ -24,7 +25,7 @@ namespace CommentedPosts.Repositories
 		// GET api/students/5
 		public Post Get(int id)
 		{
-			return context.Posts.FirstOrDefault(s => s.Id == id);
+			return context.Posts.Include(p => p.Comments).FirstOrDefault(s => s.Id == id);
 		}
 
 		// POST api/students

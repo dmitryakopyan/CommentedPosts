@@ -30,6 +30,14 @@ namespace CommentedPosts.Controllers
 
 		// GET api/posts
 		[HttpGet]
+		public IActionResult Details(int id)
+		{
+			var student = this.postsRepository.Get(id);
+			return View(student);
+		}
+
+		// GET api/posts
+		[HttpGet]
 		public IActionResult Edit(int id)
 		{
 			var student = this.postsRepository.Get(id);

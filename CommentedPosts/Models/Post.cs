@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace CommentedPosts.Models
 {
@@ -13,5 +15,7 @@ namespace CommentedPosts.Models
 		public string Comment { get; set; }
 
 		public DateTime DateTime { get; set; }
+
+		public IList<Comment> Comments { get; set; }
 	}
 }
