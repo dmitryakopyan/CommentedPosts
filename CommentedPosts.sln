@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommentedPosts", "CommentedPosts\CommentedPosts.csproj", "{E858B98C-EC32-4F64-AF1D-5462281A6915}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommentedPostsUI", "CommentedPostsUI\CommentedPostsUI\CommentedPostsUI.csproj", "{4A164AD6-DBD9-4982-BE48-89F21B77A629}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{E858B98C-EC32-4F64-AF1D-5462281A6915}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E858B98C-EC32-4F64-AF1D-5462281A6915}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E858B98C-EC32-4F64-AF1D-5462281A6915}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A164AD6-DBD9-4982-BE48-89F21B77A629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A164AD6-DBD9-4982-BE48-89F21B77A629}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A164AD6-DBD9-4982-BE48-89F21B77A629}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A164AD6-DBD9-4982-BE48-89F21B77A629}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
