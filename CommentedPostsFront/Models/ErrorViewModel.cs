@@ -1,6 +1,4 @@
-using System;
-
-namespace CommentedPostsUI.Models
+namespace CommentedPostsFront.Models
 {
 	public class ErrorViewModel
 	{

@@ -9,11 +9,11 @@ using Newtonsoft.Json;
 
 namespace CommentedPostsFront.Controllers
 {
-	public class PostsController : Controller
+	public class CommentsController : Controller
 	{
 		private const string UriString = "https://localhost:44368/";
 
-		public PostsController()
+		public CommentsController()
 		{
 		}
 
@@ -21,13 +21,13 @@ namespace CommentedPostsFront.Controllers
 		[HttpGet]
 		public IActionResult Index()
 		{
-			IEnumerable<Post> students = null;
+			IEnumerable<Comment> comments = null;
 
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var responseTask = client.GetAsync("posts");
+				var responseTask = client.GetAsync("comments");
 				responseTask.Wait();
 
 				var result = responseTask.Result;
@@ -36,16 +36,16 @@ namespace CommentedPostsFront.Controllers
 					var readTask = result.Content.ReadAsStringAsync();
 					readTask.Wait();
 
-					students = JsonConvert.DeserializeObject<List<Post>>(readTask.Result);
+					comments = JsonConvert.DeserializeObject<List<Comment>>(readTask.Result);
 				}
 				else
 				{
-					students = Enumerable.Empty<Post>();
+					comments = Enumerable.Empty<Comment>();
 
 					ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
 				}
 			}
-			return View(students);
+			return View(comments);
 		}
 
 		private static HttpClient GetHttpClient()
@@ -55,38 +55,31 @@ namespace CommentedPostsFront.Controllers
 
 		// GET api/posts
 		[HttpGet]
-		public IActionResult Create()
+		public IActionResult Add(int postId)
 		{
+			ViewBag.PostId = postId;
 			return View();
-		}
-
-		// GET api/posts
-		[HttpGet]
-		public IActionResult Details(int id)
-		{
-			var student = this.Get(id);
-			return View(student);
 		}
 
 		// GET api/posts
 		[HttpGet]
 		public IActionResult Edit(int id)
 		{
-			var student = this.Get(id);
-			return View(student);
+			var comment = this.Get(id);
+			return View(comment);
 		}
 
 		// GET api/posts/5
 		[HttpGet]
-		public Post Get(int id)
+		public Comment Get(int id)
 		{
-			Post post;
+			Comment comment;
 
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var responseTask = client.GetAsync("posts/" + id);
+				var responseTask = client.GetAsync("comments/" + id);
 				responseTask.Wait();
 
 				var result = responseTask.Result;
@@ -95,90 +88,89 @@ namespace CommentedPostsFront.Controllers
 					var readTask = result.Content.ReadAsStringAsync();
 					readTask.Wait();
 
-					post = JsonConvert.DeserializeObject<Post>(readTask.Result);
+					comment = JsonConvert.DeserializeObject<Comment>(readTask.Result);
 				}
 				else
 				{
-					post = null;
+					comment = null;
 
 					ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
 				}
 			}
-			return post;
+			return comment;
 		}
 
 		// POST api/posts
 		[HttpPost]
-		public IActionResult Create(Post post)
+		public IActionResult Add(int postId, Comment comment)
 		{
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var json = JsonConvert.SerializeObject(post);
+				var json = JsonConvert.SerializeObject(comment);
 				var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
 
-				var responseTask = client.PostAsync("posts", content);
+				var responseTask = client.PostAsync("comments/" + postId, content);
 				responseTask.Wait();
 
 				var result = responseTask.Result;
 				if (result.IsSuccessStatusCode)
 				{
-					return RedirectToAction("Index");
+					return RedirectToAction("Details", "Posts", new { id = postId.ToString() });
 				}
 			}
 
 			ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
 
-			return View(post);
+			return View(comment);
 		}
 
 		// PUT api/posts/5
 		[HttpPost]
-		public IActionResult Edit(int id, Post post)
+		public IActionResult Edit(int id, Comment comment)
 		{
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var json = JsonConvert.SerializeObject(post);
+				var json = JsonConvert.SerializeObject(comment);
 				var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
 
-				var responseTask = client.PutAsync("posts/" + post.Id, content);
+				var responseTask = client.PutAsync("comments/" + comment.ID, content);
 				responseTask.Wait();
 
 				var result = responseTask.Result;
 				if (result.IsSuccessStatusCode)
 				{
-					return RedirectToAction("Index");
+					return RedirectToAction("Details", "Posts", new { id = comment.PostID.ToString() });
 				}
 			}
 
 			ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
 
-			return View(post);
+			return View(comment);
 		}
 	
-
 		// DELETE api/posts/5
-		public IActionResult Delete(int id)
+		public IActionResult Delete(int postId, int id)
 		{
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var responseTask = client.DeleteAsync("posts/" + id);
+				var responseTask = client.DeleteAsync("comments/" + id);
 				responseTask.Wait();
 
 				var result = responseTask.Result;
 				if (result.IsSuccessStatusCode)
 				{
-					return RedirectToAction("Index");
+					return RedirectToAction("Details", "Posts", new { id = postId.ToString() });
 				}
 				else
 				{
 					ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-					return RedirectToAction("Index");
+					return RedirectToAction("Details", "Posts", new { id = postId.ToString() });
 				}
 			}
 		}

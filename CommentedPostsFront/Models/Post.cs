@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CommentedPostsUI.Models
+namespace CommentedPostsFront.Models
 {
 	public class Post
 	{

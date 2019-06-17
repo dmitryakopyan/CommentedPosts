@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using CommentedPostsUI.Models;
+using CommentedPostsFront.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CommentedPostsUI.Controllers
+namespace CommentedPostsFront.Controllers
 {
 	public class HomeController : Controller
 	{

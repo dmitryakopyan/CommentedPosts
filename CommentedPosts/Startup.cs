@@ -33,6 +33,7 @@ namespace CommentedPosts
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 			services.AddScoped<IPostsRepository, PostsRepository>();
+			services.AddScoped<ICommentsRepository, CommentsRepository>();
 
 			services.AddEntityFrameworkSqlServer()
 				.AddDbContext<CommentedPostsDbContext>
