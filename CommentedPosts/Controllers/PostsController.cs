@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommentedPosts.Controllers
 {
+	[Route("/[controller]")]
 	public class PostsController : Controller
 	{
 		private readonly IPostsRepository postsRepository;
@@ -23,8 +24,7 @@ namespace CommentedPosts.Controllers
 		}
 
 		// GET api/posts/5
-		[HttpGet]
-		[Route("item")]
+		[HttpGet("{id}")]
 		public IActionResult Get(int id)
 		{
 			var post = this.postsRepository.Get(id);
@@ -33,6 +33,7 @@ namespace CommentedPosts.Controllers
 
 		// POST api/posts
 		[HttpPost]
+		[Route("")]
 		public IActionResult Create(Post post)
 		{
 			var result = this.postsRepository.Post(post);
@@ -42,6 +43,7 @@ namespace CommentedPosts.Controllers
 
 		// PUT api/posts/5
 		[HttpPost]
+		[Route("Edit")]
 		public IActionResult Edit(int id, Post post)
 		{
 			this.postsRepository.Put(id, post);
