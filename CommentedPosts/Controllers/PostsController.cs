@@ -34,7 +34,7 @@ namespace CommentedPosts.Controllers
 		// POST api/posts
 		[HttpPost]
 		[Route("")]
-		public IActionResult Create(Post post)
+		public IActionResult Create([FromBody]Post post)
 		{
 			var result = this.postsRepository.Post(post);
 
@@ -42,9 +42,8 @@ namespace CommentedPosts.Controllers
 		}
 
 		// PUT api/posts/5
-		[HttpPost]
-		[Route("Edit")]
-		public IActionResult Edit(int id, Post post)
+		[HttpPut("{id}")]
+		public IActionResult Edit(int id, [FromBody]Post post)
 		{
 			this.postsRepository.Put(id, post);
 
@@ -52,6 +51,7 @@ namespace CommentedPosts.Controllers
 		}
 
 		// DELETE api/posts/5
+		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
 			this.postsRepository.Delete(id);
