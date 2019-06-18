@@ -17,37 +17,6 @@ namespace CommentedPostsFront.Controllers
 		{
 		}
 
-		// GET api/posts
-		[HttpGet]
-		public IActionResult Index()
-		{
-			IEnumerable<Comment> comments = null;
-
-			using (var client = GetHttpClient())
-			{
-				client.BaseAddress = new Uri(UriString);
-
-				var responseTask = client.GetAsync("comments");
-				responseTask.Wait();
-
-				var result = responseTask.Result;
-				if (result.IsSuccessStatusCode)
-				{
-					var readTask = result.Content.ReadAsStringAsync();
-					readTask.Wait();
-
-					comments = JsonConvert.DeserializeObject<List<Comment>>(readTask.Result);
-				}
-				else
-				{
-					comments = Enumerable.Empty<Comment>();
-
-					ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-				}
-			}
-			return View(comments);
-		}
-
 		private static HttpClient GetHttpClient()
 		{
 			return new HttpClient(new HttpClientHandler() {UseDefaultCredentials = true});

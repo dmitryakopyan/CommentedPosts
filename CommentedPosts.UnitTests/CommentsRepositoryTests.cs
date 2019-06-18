@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
-using CommentedPosts.Controllers;
+using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
 using CommentedPosts.Repositories;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -18,11 +16,9 @@ namespace CommentedPosts.UnitTests
 	{
 		private const string CurrentUser = "CurrentUser";
 
-		private CommentsRepository controller;
+		private ICommentsRepository controller;
 
 		private Mock<CommentedPostsDbContext> mockContext;
-
-		private Mock<IClock> mockClock;
 
 		private DateTime CurrentTime = new DateTime(2013, 5, 6);
 
@@ -92,7 +88,7 @@ namespace CommentedPosts.UnitTests
 		}
 
 		/// <summary>
-		/// Delete method calls remove method of the context and returns OK result.
+		/// Delete method calls remove method of the context.
 		/// </summary>
 		[Test]
 		public void DeleteMethodCallsContextRemoveMethod()

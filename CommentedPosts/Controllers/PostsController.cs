@@ -1,5 +1,5 @@
-﻿using CommentedPosts.Models;
-using CommentedPosts.Repositories;
+﻿using CommentedPosts.Interfaces;
+using CommentedPosts.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

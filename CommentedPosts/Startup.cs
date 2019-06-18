@@ -1,4 +1,5 @@
-﻿using CommentedPosts.Models;
+﻿using CommentedPosts.Interfaces;
+using CommentedPosts.Models;
 using CommentedPosts.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

@@ -1,5 +1,5 @@
-﻿using CommentedPosts.Models;
-using CommentedPosts.Repositories;
+﻿using CommentedPosts.Interfaces;
+using CommentedPosts.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +23,7 @@ namespace CommentedPosts.Controllers
 			set => context = value;
 		}
 
-	// POST api/comments/5
+		// POST api/comments/5
 		[HttpPost]
 		[Route("{postId}")]
 		public IActionResult Add(int postId, [FromBody]Comment comment)

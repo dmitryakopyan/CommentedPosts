@@ -1,8 +1,7 @@
 using System.Security.Claims;
-using System.Security.Principal;
 using CommentedPosts.Controllers;
+using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
-using CommentedPosts.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

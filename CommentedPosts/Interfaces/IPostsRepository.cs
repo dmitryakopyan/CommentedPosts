@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using CommentedPosts.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CommentedPosts.Repositories
+namespace CommentedPosts.Interfaces
 {
 	public interface IPostsRepository
 	{

@@ -1,26 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CommentedPosts.Repositories
 {
-	public interface IClock
-	{
-		DateTime GetTime();
-	}
-
-	public class Clock : IClock
-	{
-		public DateTime GetTime()
-		{
-			return DateTime.Now;
-		}
-	}
-
 	public class CommentsRepository : ICommentsRepository
 	{
 		private readonly CommentedPostsDbContext context;

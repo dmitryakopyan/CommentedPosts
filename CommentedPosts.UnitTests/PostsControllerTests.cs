@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using CommentedPosts.Controllers;
+using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
-using CommentedPosts.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -40,7 +40,6 @@ namespace CommentedPosts.UnitTests
 		public void GetAllMethodCallsRepositoryGetAllMethodAndReturnsOkResultWithPostCollection()
 		{
 			// arrange
-			var postId = 15;
 			var postCollection = new List<Post>{new Post() {Title = "MyPost"}};
 			mockRepository.Setup(x => x.GetAll()).Returns(postCollection);
 
