@@ -14,6 +14,8 @@ namespace CommentedPostsFront
 		{
 			CreateMap<Post, PostViewModel>();
 			CreateMap<Comment, CommentViewModel>();
+			CreateMap<PostViewModel, Post>();
+			CreateMap<CommentViewModel, Comment>();
 		}
 	}
 }

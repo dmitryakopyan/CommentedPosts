@@ -14,6 +14,8 @@ namespace CommentedPosts
 		{
 			CreateMap<PostDTO, Post>();
 			CreateMap<CommentDTO, Comment>();
+			CreateMap<Post, PostDTO>();
+			CreateMap<Comment, CommentDTO>();
 		}
 	}
 }
