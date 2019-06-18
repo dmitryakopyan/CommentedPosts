@@ -1,5 +1,6 @@
 ﻿using CommentedPosts.Models;
 using CommentedPosts.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommentedPosts.Controllers
@@ -9,9 +10,17 @@ namespace CommentedPosts.Controllers
 	{
 		private readonly IPostsRepository postsRepository;
 
+		private HttpContext context;
+
 		public PostsController(IPostsRepository postsRepository)
 		{
 			this.postsRepository = postsRepository;
+		}
+
+		public HttpContext Context
+		{
+			get => context ?? HttpContext;
+			set => context = value;
 		}
 
 		// GET api/posts
@@ -36,6 +45,7 @@ namespace CommentedPosts.Controllers
 		[Route("")]
 		public IActionResult Create([FromBody]Post post)
 		{
+			post.Author = context.User.Identity.Name;
 			var result = this.postsRepository.Post(post);
 
 			return Ok(result);

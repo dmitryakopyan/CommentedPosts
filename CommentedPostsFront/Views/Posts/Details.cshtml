@@ -71,7 +71,7 @@
 				@Html.DisplayFor(modelItem => item.DateTime)
 			</td>
 			<td>
-				<a asp-action="Edit" asp-controller="Comments" asp-route-id="@item.ID">Edit</a> |
+				<a asp-action="Edit" asp-controller="Comments" asp-all-route-data="@(new Dictionary<string,string> { { "postId", item.PostID.ToString() }, { "id", item.ID.ToString() } })">Edit</a> |
 				<a asp-action="Delete" asp-controller="Comments" asp-all-route-data='@(new Dictionary<string,string> { { "postId", item.PostID.ToString() }, { "id", item.ID.ToString() } })'>Delete</a>
 			</td>
 		</tr>

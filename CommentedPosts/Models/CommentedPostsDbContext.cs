@@ -10,11 +10,15 @@ namespace CommentedPosts.Models
 	{
 		public CommentedPostsDbContext(DbContextOptions options) : base(options)
 		{
-			//Database.S(new MigrateDatabaseToLatestVersion<CommentedPostsDbContext, EF6Console.Migrations.Configuration>());
 		}
 
-		public DbSet<Post> Posts { get; set; }
+		public CommentedPostsDbContext()
+		{
+			
+		}
 
-		public DbSet<Comment> Comments { get; set; }
+		public virtual DbSet<Post> Posts { get; set; }
+
+		public virtual DbSet<Comment> Comments { get; set; }
 	}
 }

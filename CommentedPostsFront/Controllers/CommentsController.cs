@@ -63,9 +63,10 @@ namespace CommentedPostsFront.Controllers
 
 		// GET api/posts
 		[HttpGet]
-		public IActionResult Edit(int id)
+		public IActionResult Edit(int postId, int id)
 		{
 			var comment = this.Get(id);
+			ViewBag.PostId = postId;
 			return View(comment);
 		}
 
@@ -128,7 +129,7 @@ namespace CommentedPostsFront.Controllers
 
 		// PUT api/posts/5
 		[HttpPost]
-		public IActionResult Edit(int id, Comment comment)
+		public IActionResult Edit(int id, int postId, Comment comment)
 		{
 			using (var client = GetHttpClient())
 			{
@@ -143,7 +144,7 @@ namespace CommentedPostsFront.Controllers
 				var result = responseTask.Result;
 				if (result.IsSuccessStatusCode)
 				{
-					return RedirectToAction("Details", "Posts", new { id = comment.PostID.ToString() });
+					return RedirectToAction("Details", "Posts", new { id = postId.ToString() });
 				}
 			}
 

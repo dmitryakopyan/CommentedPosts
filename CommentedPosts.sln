@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommentedPosts", "CommentedPosts\CommentedPosts.csproj", "{E858B98C-EC32-4F64-AF1D-5462281A6915}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommentedPostsFront", "CommentedPostsFront\CommentedPostsFront.csproj", "{F93FDFB2-8155-48C3-9D14-EFF90F4044EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommentedPostsFront", "CommentedPostsFront\CommentedPostsFront.csproj", "{F93FDFB2-8155-48C3-9D14-EFF90F4044EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommentedPosts.UnitTests", "CommentedPosts.UnitTests\CommentedPosts.UnitTests.csproj", "{BC39FF8F-DF52-4B69-A5CE-71AE3220EF86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F93FDFB2-8155-48C3-9D14-EFF90F4044EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F93FDFB2-8155-48C3-9D14-EFF90F4044EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F93FDFB2-8155-48C3-9D14-EFF90F4044EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC39FF8F-DF52-4B69-A5CE-71AE3220EF86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC39FF8F-DF52-4B69-A5CE-71AE3220EF86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC39FF8F-DF52-4B69-A5CE-71AE3220EF86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC39FF8F-DF52-4B69-A5CE-71AE3220EF86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

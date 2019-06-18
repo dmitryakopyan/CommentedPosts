@@ -2,36 +2,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommentedPosts.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommentedPosts.Repositories
 {
+	public interface IClock
+	{
+		DateTime GetTime();
+	}
+
+	public class Clock : IClock
+	{
+		public DateTime GetTime()
+		{
+			return DateTime.Now;
+		}
+	}
+
 	public class CommentsRepository : ICommentsRepository
 	{
 		private readonly CommentedPostsDbContext context;
 
-		public CommentsRepository(CommentedPostsDbContext context)
+		private readonly IClock clock;
+
+		public CommentsRepository(CommentedPostsDbContext context, IClock clock)
 		{
 			this.context = context;
+			this.clock = clock;
 		}
 
-		// GET api/students
-		public IEnumerable<Comment> GetAll()
-		{
-			return context.Comments.ToList();
-		}
-
-		// GET api/students/5
+		// GET api/comments/5
 		public Comment Get(int id)
 		{
 			return context.Comments.FirstOrDefault(s => s.ID == id);
 		}
 
-		// POST api/students
+		// POST api/comments/5
 		public int Post(int postId, [FromBody] Comment comment)
 		{
-			comment.DateTime = DateTime.Now;
+			comment.DateTime = clock.GetTime();
 			comment.PostID = postId;
 			context.Add(comment);
 			context.SaveChanges();
@@ -39,15 +50,13 @@ namespace CommentedPosts.Repositories
 			return comment.ID;
 		}
 
-		// PUT api/students/5
-		[HttpPut]
-		[ActionName("Update")]
+		// PUT api/comments/5
 		public void Put(int id, [FromBody] Comment comment)
 		{
 			var existing = this.Get(id);
 
 			if (existing == null)
-				throw new KeyNotFoundException();
+				throw new Exception("Not found");
 
 			existing.Content = comment.Content;
 
@@ -55,7 +64,7 @@ namespace CommentedPosts.Repositories
 			context.SaveChanges();
 		}
 
-		// DELETE api/students/5
+		// DELETE api/comments/5
 		public void Delete(int id)
 		{
 			var existing = this.Get(id);

@@ -11,9 +11,12 @@ namespace CommentedPosts.Repositories
 	{
 		private readonly CommentedPostsDbContext context;
 
-		public PostsRepository(CommentedPostsDbContext context)
+		private readonly IClock clock;
+
+		public PostsRepository(CommentedPostsDbContext context, IClock clock)
 		{
 			this.context = context;
+			this.clock = clock;
 		}
 
 		// GET api/students
@@ -31,7 +34,7 @@ namespace CommentedPosts.Repositories
 		// POST api/students
 		public int Post([FromBody] Post post)
 		{
-			post.DateTime = DateTime.Now;
+			post.DateTime = clock.GetTime();
 			context.Add(post);
 			context.SaveChanges();
 

@@ -1,5 +1,6 @@
 ﻿using CommentedPosts.Models;
 using CommentedPosts.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommentedPosts.Controllers
@@ -9,39 +10,41 @@ namespace CommentedPosts.Controllers
 	{
 		private readonly ICommentsRepository commentsRepository;
 
+		private HttpContext context;
+
 		public CommentsController(ICommentsRepository commentsRepository)
 		{
 			this.commentsRepository = commentsRepository;
 		}
 
-		// GET api/posts
-		[HttpGet]
-		[Route("")]
-		public IActionResult GetAll()
+		public HttpContext Context
 		{
-			var posts = commentsRepository.GetAll();
-			return Ok(posts);
+			get => context ?? HttpContext;
+			set => context = value;
 		}
 
-		// GET api/posts/5
-		[HttpGet("{id}")]
-		public IActionResult Get(int id)
-		{
-			var post = this.commentsRepository.Get(id);
-			return post == null ? (IActionResult)NotFound() : Ok(post);
-		}
-
-		// POST api/posts/5
+	// POST api/comments/5
 		[HttpPost]
 		[Route("{postId}")]
 		public IActionResult Add(int postId, [FromBody]Comment comment)
 		{
+			comment.Author = context.User.Identity.Name;
 			var result = this.commentsRepository.Post(postId, comment);
 
 			return Ok(result);
 		}
 
-		// DELETE api/posts/5
+		// PUT api/comments/5
+		[HttpPut]
+		[Route("{id}")]
+		public IActionResult Update(int id, [FromBody]Comment comment)
+		{
+			this.commentsRepository.Put(id, comment);
+
+			return Ok();
+		}
+
+		// DELETE api/comments/5
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
