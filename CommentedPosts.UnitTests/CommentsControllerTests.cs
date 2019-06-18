@@ -1,5 +1,7 @@
 using System.Security.Claims;
+using AutoMapper;
 using CommentedPosts.Controllers;
+using CommentedPosts.DTO;
 using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +19,8 @@ namespace CommentedPosts.UnitTests
 
 		private Mock<ICommentsRepository> mockRepository;
 
+		private Mock<IMapper> mapper;
+
 		[SetUp]
 		public void Setup()
 		{
@@ -28,7 +32,8 @@ namespace CommentedPosts.UnitTests
 			context.Setup(x => x.User).Returns(user.Object);
 
 			mockRepository = new Mock<ICommentsRepository>();
-			controller = new CommentsController(mockRepository.Object);
+			mapper = new Mock<IMapper>();
+			controller = new CommentsController(mockRepository.Object, mapper.Object);
 			controller.Context = context.Object;
 		}
 
@@ -44,7 +49,7 @@ namespace CommentedPosts.UnitTests
 			mockRepository.Setup(x => x.Post(postId, It.IsAny<Comment>())).Returns(commentId);
 
 			// act
-			IActionResult result = controller.Add(postId, new Comment());
+			IActionResult result = controller.Add(postId, new CommentDTO());
 
 			// assert
 			mockRepository.VerifyAll();
@@ -64,7 +69,7 @@ namespace CommentedPosts.UnitTests
 			mockRepository.Setup(x => x.Put(commentId, It.IsAny<Comment>()));
 
 			// act
-			IActionResult result = controller.Update(commentId, new Comment());
+			IActionResult result = controller.Update(commentId, new CommentDTO());
 
 			// assert
 			mockRepository.VerifyAll();

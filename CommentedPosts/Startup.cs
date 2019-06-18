@@ -1,4 +1,5 @@
-﻿using CommentedPosts.Interfaces;
+﻿using AutoMapper;
+using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
 using CommentedPosts.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,8 @@ namespace CommentedPosts
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
+
+			services.AddAutoMapper();
 
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

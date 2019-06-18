@@ -1,4 +1,6 @@
-﻿using CommentedPosts.Interfaces;
+﻿using AutoMapper;
+using CommentedPosts.DTO;
+using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +14,12 @@ namespace CommentedPosts.Controllers
 
 		private HttpContext context;
 
-		public CommentsController(ICommentsRepository commentsRepository)
+		private IMapper mapper;
+
+		public CommentsController(ICommentsRepository commentsRepository, IMapper mapper)
 		{
 			this.commentsRepository = commentsRepository;
+			this.mapper = mapper;
 		}
 
 		public HttpContext Context
@@ -27,17 +32,17 @@ namespace CommentedPosts.Controllers
 		[HttpGet("{id}")]
 		public IActionResult Get(int id)
 		{
-			var comment = this.commentsRepository.Get(id);
+			var comment = mapper.Map<CommentDTO>(this.commentsRepository.Get(id));
 			return comment == null ? (IActionResult)NotFound() : Ok(comment);
 		}
 
 		// POST api/comments/5
 		[HttpPost]
 		[Route("{postId}")]
-		public IActionResult Add(int postId, [FromBody]Comment comment)
+		public IActionResult Add(int postId, [FromBody]CommentDTO comment)
 		{
 			comment.Author = Context.User.Identity.Name;
-			var result = this.commentsRepository.Post(postId, comment);
+			var result = this.commentsRepository.Post(postId, mapper.Map<Comment>(comment));
 
 			return Ok(result);
 		}
@@ -45,9 +50,9 @@ namespace CommentedPosts.Controllers
 		// PUT api/comments/5
 		[HttpPut]
 		[Route("{id}")]
-		public IActionResult Update(int id, [FromBody]Comment comment)
+		public IActionResult Update(int id, [FromBody]CommentDTO comment)
 		{
-			this.commentsRepository.Put(id, comment);
+			this.commentsRepository.Put(id, mapper.Map<Comment>(comment));
 
 			return Ok();
 		}

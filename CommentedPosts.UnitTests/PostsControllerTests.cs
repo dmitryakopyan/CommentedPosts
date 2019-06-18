@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using AutoMapper;
 using CommentedPosts.Controllers;
+using CommentedPosts.DTO;
 using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +21,8 @@ namespace CommentedPosts.UnitTests
 
 		private Mock<IPostsRepository> mockRepository;
 
+		private Mock<IMapper> mapper;
+
 		[SetUp]
 		public void Setup()
 		{
@@ -29,7 +34,12 @@ namespace CommentedPosts.UnitTests
 			context.Setup(x => x.User).Returns(user.Object);
 
 			mockRepository = new Mock<IPostsRepository>();
-			controller = new PostsController(mockRepository.Object);
+			mapper = new Mock<IMapper>();
+			mapper.Setup(x => x.Map<Post>(It.IsAny<PostDTO>())).Returns((PostDTO post) => ConvertFromDto(post));
+			mapper.Setup(x => x.Map<IEnumerable<Post>>(It.IsAny<IEnumerable<PostDTO>>())).Returns((IEnumerable<PostDTO> posts) => posts.ToList().Select(ConvertFromDto));
+			mapper.Setup(x => x.Map<PostDTO>(It.IsAny<Post>())).Returns((Post post) => ConvertToDto(post));
+			mapper.Setup(x => x.Map<IEnumerable<PostDTO>>(It.IsAny<IEnumerable<Post>>())).Returns((IEnumerable<Post> posts) => posts.ToList().Select(ConvertToDto));
+			controller = new PostsController(mockRepository.Object, mapper.Object);
 			controller.Context = context.Object;
 		}
 
@@ -50,8 +60,8 @@ namespace CommentedPosts.UnitTests
 			mockRepository.VerifyAll();
 			Assert.IsInstanceOf<OkObjectResult>(result);
 			var value = ((OkObjectResult)result).Value;
-			Assert.IsInstanceOf<List<Post>>(value);
-			Assert.IsTrue(this.AreCollectionsEqual(postCollection, (List<Post>)value));
+			Assert.IsInstanceOf<IEnumerable<PostDTO>>(value);
+			Assert.IsTrue(this.AreCollectionsEqual(postCollection, (IEnumerable<PostDTO>)value));
 		}
 
 		/// <summary>
@@ -74,7 +84,7 @@ namespace CommentedPosts.UnitTests
 			mockRepository.VerifyAll();
 			Assert.IsInstanceOf<OkObjectResult>(result);
 			var value = ((OkObjectResult)result).Value;
-			Assert.AreEqual(post, value);
+			Assert.IsTrue(AreObjectsEqual(post, (PostDTO)value));
 		}
 
 		/// <summary>
@@ -108,7 +118,7 @@ namespace CommentedPosts.UnitTests
 			mockRepository.Setup(x => x.Post(It.IsAny<Post>())).Returns(postId);
 
 			// act
-			IActionResult result = controller.Create(new Post());
+			IActionResult result = controller.Create(new PostDTO());
 
 			// assert
 			mockRepository.VerifyAll();
@@ -128,7 +138,7 @@ namespace CommentedPosts.UnitTests
 			mockRepository.Setup(x => x.Put(postId, It.IsAny<Post>()));
 
 			// act
-			IActionResult result = controller.Edit(postId, new Post());
+			IActionResult result = controller.Edit(postId, new PostDTO());
 
 			// assert
 			mockRepository.VerifyAll();
@@ -153,18 +163,59 @@ namespace CommentedPosts.UnitTests
 			Assert.IsInstanceOf<OkResult>(result);
 		}
 
-		private bool AreCollectionsEqual(IReadOnlyList<Post> expected, IReadOnlyList<Post> actual)
+		private bool AreCollectionsEqual(IEnumerable<Post> expected, IEnumerable<PostDTO> actual)
 		{
-			if (expected.Count != actual.Count)
+			if (expected.Count() != actual.Count())
 				return false;
 
-			for (int i =0; i<expected.Count;i++)
+			var expectedEnumr = expected.GetEnumerator();
+			var actualEnumr = actual.GetEnumerator();
+
+			while (expectedEnumr.MoveNext())
 			{
-				if (!expected[i].Equals(actual[i]))
+				actualEnumr.MoveNext();
+				if (!AreObjectsEqual(expectedEnumr.Current, actualEnumr.Current))
 					return false;
 			}
 
 			return true;
+		}
+
+		private bool AreObjectsEqual(Post expected, PostDTO actual)
+		{
+			return expected.Content == actual.Content
+			       && expected.Title == actual.Title
+			       && expected.Author == actual.Author
+			       && expected.Id == actual.Id
+			       && expected.DateTime == actual.DateTime;
+		}
+
+		private Post ConvertFromDto(PostDTO post)
+		{
+			if (post == null) return null;
+
+			return new Post()
+			{
+				Content = post.Content,
+				DateTime = post.DateTime,
+				Title = post.Title,
+				Author = post.Author,
+				Id = post.Id
+			};
+		}
+
+		private PostDTO ConvertToDto(Post post)
+		{
+			if (post == null) return null;
+
+			return new PostDTO()
+			{
+				Content = post.Content,
+				DateTime = post.DateTime,
+				Title = post.Title,
+				Author = post.Author,
+				Id = post.Id
+			};
 		}
 	}
 }

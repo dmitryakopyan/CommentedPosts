@@ -1,4 +1,7 @@
-﻿using CommentedPosts.Interfaces;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using CommentedPosts.DTO;
+using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +15,12 @@ namespace CommentedPosts.Controllers
 
 		private HttpContext context;
 
-		public PostsController(IPostsRepository postsRepository)
+		private IMapper mapper;
+
+		public PostsController(IPostsRepository postsRepository, IMapper mapper)
 		{
 			this.postsRepository = postsRepository;
+			this.mapper = mapper;
 		}
 
 		public HttpContext Context
@@ -28,7 +34,7 @@ namespace CommentedPosts.Controllers
 		[Route("")]
 		public IActionResult GetAll()
 		{
-			var posts = postsRepository.GetAll();
+			var posts = mapper.Map<IEnumerable<PostDTO>>(postsRepository.GetAll());
 			return Ok(posts);
 		}
 
@@ -36,26 +42,26 @@ namespace CommentedPosts.Controllers
 		[HttpGet("{id}")]
 		public IActionResult Get(int id)
 		{
-			var post = this.postsRepository.Get(id);
+			var post = mapper.Map<PostDTO>(this.postsRepository.Get(id));
 			return post == null ? (IActionResult)NotFound() : Ok(post);
 		}
 
 		// POST api/posts
 		[HttpPost]
 		[Route("")]
-		public IActionResult Create([FromBody]Post post)
+		public IActionResult Create([FromBody]PostDTO post)
 		{
 			post.Author = Context.User.Identity.Name;
-			var result = this.postsRepository.Post(post);
+			var result = this.postsRepository.Post(mapper.Map<Post>(post));
 
 			return Ok(result);
 		}
 
 		// PUT api/posts/5
 		[HttpPut("{id}")]
-		public IActionResult Edit(int id, [FromBody]Post post)
+		public IActionResult Edit(int id, [FromBody]PostDTO post)
 		{
-			this.postsRepository.Put(id, post);
+			this.postsRepository.Put(id, mapper.Map<Post>(post));
 
 			return Ok();
 		}
