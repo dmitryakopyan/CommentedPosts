@@ -5,81 +5,32 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>@(Model.Title)</h2>
 
-<div>
-	<h4>Post</h4>
-	<hr />
-	<dl class="dl-horizontal">
-		<dt>
-			@Html.DisplayNameFor(model => model.Author)
-		</dt>
-		<dd>
-			@Html.DisplayFor(model => model.Author)
-		</dd>
-		<dt>
-			@Html.DisplayNameFor(model => model.Title)
-		</dt>
-		<dd>
-			@Html.DisplayFor(model => model.Title)
-		</dd>
-		<dt>
-			@Html.DisplayNameFor(model => model.Content)
-		</dt>
-		<dd>
-			@Html.DisplayFor(model => model.Content)
-		</dd>
-		<dt>
-			@Html.DisplayNameFor(model => model.DateTime)
-		</dt>
-		<dd>
-			@Html.DisplayFor(model => model.DateTime)
-		</dd>
-	</dl>
+<hr/>
+
+<p>
+	@(Model.Content)
+</p>
+
+<p>
+	<small>Posted by <b>@(Model.Author)</b> at <b>@(Model.DateTime)</b></small>
+</p>
+
+<div align="right">
+	<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+	<a asp-action="Index">Back to List</a>
 </div>
+
+<hr/>
 
 <h4>Comments</h4>
 
 <p>
 	<a asp-action="Add" asp-controller="Comments" asp-route-postId="@Model.Id">Create New</a>
 </p>
-<table class="table">
-	<thead>
-	<tr>
-		<th>
-			Content
-		</th>
-		<th>
-			Author
-		</th>
-		<th>
-			DateTime
-		</th>
-		<th></th>
-	</tr>
-	</thead>
-	<tbody>
-	@foreach (var item in Model.Comments) {
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.Content)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Author)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.DateTime)
-			</td>
-			<td>
-				<a asp-action="Edit" asp-controller="Comments" asp-all-route-data="@(new Dictionary<string,string> { { "postId", item.PostID.ToString() }, { "id", item.ID.ToString() } })">Edit</a> |
-				<a asp-action="Delete" asp-controller="Comments" asp-all-route-data='@(new Dictionary<string,string> { { "postId", item.PostID.ToString() }, { "id", item.ID.ToString() } })'>Delete</a>
-			</td>
-		</tr>
-	}
-	</tbody>
-</table>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+	@foreach (var item in Model.Comments) {
+		@Html.Partial("~/Views/Comments/View.cshtml", item);
+	}
+

@@ -23,6 +23,14 @@ namespace CommentedPosts.Controllers
 			set => context = value;
 		}
 
+		// GET api/comments/5
+		[HttpGet("{id}")]
+		public IActionResult Get(int id)
+		{
+			var comment = this.commentsRepository.Get(id);
+			return comment == null ? (IActionResult)NotFound() : Ok(comment);
+		}
+
 		// POST api/comments/5
 		[HttpPost]
 		[Route("{postId}")]

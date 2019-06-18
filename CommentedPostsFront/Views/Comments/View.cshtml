@@ -1,0 +1,17 @@
+﻿
+@{
+	ViewData["Title"] = "View";
+}
+
+<p>
+	@(Model.Content)
+</p>
+
+<p>
+	<small>Posted by <b>@(Model.Author)</b> at <b>@(Model.DateTime)</b></small>
+</p>
+
+<div align="right">
+	<a asp-action="Edit" asp-controller="Comments" asp-all-route-data="@(new Dictionary<string,string> { { "postId", Model.PostID.ToString() }, { "id", Model.ID.ToString() } })">Edit</a> |
+	<a asp-action="Delete" asp-controller="Comments" asp-all-route-data='@(new Dictionary<string,string> { { "postId", Model.PostID.ToString() }, { "id", Model.ID.ToString() } })'>Delete</a>
+</div>
