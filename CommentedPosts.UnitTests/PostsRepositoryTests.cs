@@ -73,7 +73,7 @@ namespace CommentedPosts.UnitTests
 			// arrange
 			var postId = 5;
 
-			var existingPost = new Post() { Id = postId, Author = "Author", Comment = "Old", Title = "Old"};
+			var existingPost = new Post() { Id = postId, Author = "Author", Content = "Old", Title = "Old"};
 			var data = new List<Post> { existingPost }.AsQueryable();
 			var mockSet = CreateMockSet(data);
 			mockContext.Setup(x => x.Posts).Returns(mockSet.Object);
@@ -82,11 +82,11 @@ namespace CommentedPosts.UnitTests
 			mockContext.Setup(x => x.SaveChanges());
 
 			// act
-			controller.Put(postId, new Post() { Id = postId, Comment = "NewComment", Title = "NewTitle" });
+			controller.Put(postId, new Post() { Id = postId, Content = "NewComment", Title = "NewTitle" });
 
 			// assert
 			mockContext.VerifyAll();
-			Assert.AreEqual("NewComment", existingPost.Comment);
+			Assert.AreEqual("NewComment", existingPost.Content);
 			Assert.AreEqual("NewTitle", existingPost.Title);
 		}
 
@@ -99,7 +99,7 @@ namespace CommentedPosts.UnitTests
 			// arrange
 			var postId = 5;
 
-			var existingPost = new Post() { Id = postId, Author = "Author", Comment = "Old", Title = "Old" };
+			var existingPost = new Post() { Id = postId, Author = "Author", Content = "Old", Title = "Old" };
 			var data = new List<Post> { existingPost }.AsQueryable();
 			var mockSet = CreateMockSet(data);
 

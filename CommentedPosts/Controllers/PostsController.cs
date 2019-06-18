@@ -45,7 +45,7 @@ namespace CommentedPosts.Controllers
 		[Route("")]
 		public IActionResult Create([FromBody]Post post)
 		{
-			post.Author = context.User.Identity.Name;
+			post.Author = Context.User.Identity.Name;
 			var result = this.postsRepository.Post(post);
 
 			return Ok(result);

@@ -12,7 +12,7 @@ namespace CommentedPosts.Models
 
 		public string Title { get; set; }
 
-		public string Comment { get; set; }
+		public string Content { get; set; }
 
 		public DateTime DateTime { get; set; }
 

@@ -49,7 +49,7 @@ namespace CommentedPosts.Repositories
 			if (existing == null)
 				throw new KeyNotFoundException();
 
-			existing.Comment = post.Comment;
+			existing.Content = post.Content;
 			existing.Title = post.Title;
 
 			context.Update(existing);

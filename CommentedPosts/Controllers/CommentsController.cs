@@ -28,7 +28,7 @@ namespace CommentedPosts.Controllers
 		[Route("{postId}")]
 		public IActionResult Add(int postId, [FromBody]Comment comment)
 		{
-			comment.Author = context.User.Identity.Name;
+			comment.Author = Context.User.Identity.Name;
 			var result = this.commentsRepository.Post(postId, comment);
 
 			return Ok(result);

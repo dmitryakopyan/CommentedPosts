@@ -34,6 +34,7 @@ namespace CommentedPosts
 
 			services.AddScoped<IPostsRepository, PostsRepository>();
 			services.AddScoped<ICommentsRepository, CommentsRepository>();
+			services.AddScoped<IClock, Clock>();
 
 			services.AddEntityFrameworkSqlServer()
 				.AddDbContext<CommentedPostsDbContext>
