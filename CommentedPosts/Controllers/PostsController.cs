@@ -51,6 +51,9 @@ namespace CommentedPosts.Controllers
 		[Route("")]
 		public IActionResult Create([FromBody]PostDTO post)
 		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
 			post.Author = Context.User.Identity.Name;
 			var result = this.postsRepository.Post(mapper.Map<Post>(post));
 
@@ -61,6 +64,9 @@ namespace CommentedPosts.Controllers
 		[HttpPut("{id}")]
 		public IActionResult Edit(int id, [FromBody]PostDTO post)
 		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
 			this.postsRepository.Put(id, mapper.Map<Post>(post));
 
 			return Ok();

@@ -41,6 +41,9 @@ namespace CommentedPosts.Controllers
 		[Route("{postId}")]
 		public IActionResult Add(int postId, [FromBody]CommentDTO comment)
 		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
 			comment.Author = Context.User.Identity.Name;
 			var result = this.commentsRepository.Post(postId, mapper.Map<Comment>(comment));
 
@@ -52,6 +55,9 @@ namespace CommentedPosts.Controllers
 		[Route("{id}")]
 		public IActionResult Update(int id, [FromBody]CommentDTO comment)
 		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
 			this.commentsRepository.Put(id, mapper.Map<Comment>(comment));
 
 			return Ok();
