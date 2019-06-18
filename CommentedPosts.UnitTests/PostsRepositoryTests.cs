@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
 using CommentedPosts.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Moq;
 using NUnit.Framework;
 
@@ -48,11 +51,11 @@ namespace CommentedPosts.UnitTests
 			// arrange
 			var postId = 15;
 			var post = new Post() { Id = postId };
-			mockContext.Setup(x => x.Add(It.IsAny<Post>()));
-			mockContext.Setup(x => x.SaveChanges());
+			mockContext.Setup(x => x.AddAsync(It.IsAny<Post>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(default(EntityEntry<Post>)));
+			mockContext.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(default(int)));
 
 			// act
-			int result = repository.Post(post);
+			int result = repository.PostAsync(post).Result;
 
 			// assert
 			mockContext.VerifyAll();

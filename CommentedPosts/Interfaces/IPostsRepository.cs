@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CommentedPosts.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +7,9 @@ namespace CommentedPosts.Interfaces
 {
 	public interface IPostsRepository
 	{
-		IEnumerable<Post> GetAll();
+		Task<IEnumerable<Post>> GetAllAsync();
 		Post Get(int id);
-		int Post([FromBody]Post post);
+		Task<int> PostAsync([FromBody]Post post);
 		void Put(int id, [FromBody]Post post);
 		void Delete(int id);
 	}

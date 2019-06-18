@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoMapper;
 using CommentedPosts.Controllers;
 using CommentedPosts.DTO;
@@ -51,10 +52,10 @@ namespace CommentedPosts.UnitTests
 		{
 			// arrange
 			var postCollection = new List<Post>{new Post() {Title = "MyPost"}};
-			mockRepository.Setup(x => x.GetAll()).Returns(postCollection);
+			mockRepository.Setup(x => x.GetAllAsync()).Returns(Task.FromResult<IEnumerable<Post>>(postCollection));
 
 			// act
-			IActionResult result = controller.GetAll();
+			IActionResult result = controller.GetAllAsync().Result;
 
 			// assert
 			mockRepository.VerifyAll();
@@ -115,10 +116,10 @@ namespace CommentedPosts.UnitTests
 		{
 			// arrange
 			var postId = 15;
-			mockRepository.Setup(x => x.Post(It.IsAny<Post>())).Returns(postId);
+			mockRepository.Setup(x => x.PostAsync(It.IsAny<Post>())).Returns(Task.FromResult(postId));
 
 			// act
-			IActionResult result = controller.Create(new PostDTO());
+			IActionResult result = controller.CreateAsync(new PostDTO()).Result;
 
 			// assert
 			mockRepository.VerifyAll();

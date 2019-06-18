@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using CommentedPosts.DTO;
 using CommentedPosts.Interfaces;
@@ -32,9 +33,9 @@ namespace CommentedPosts.Controllers
 		// GET api/posts
 		[HttpGet]
 		[Route("")]
-		public IActionResult GetAll()
+		public async Task<IActionResult> GetAllAsync()
 		{
-			var posts = mapper.Map<IEnumerable<PostDTO>>(postsRepository.GetAll());
+			var posts = mapper.Map<IEnumerable<PostDTO>>(await postsRepository.GetAllAsync());
 			return Ok(posts);
 		}
 
@@ -49,13 +50,13 @@ namespace CommentedPosts.Controllers
 		// POST api/posts
 		[HttpPost]
 		[Route("")]
-		public IActionResult Create([FromBody]PostDTO post)
+		public async Task<IActionResult> CreateAsync([FromBody]PostDTO post)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
 			post.Author = Context.User.Identity.Name;
-			var result = this.postsRepository.Post(mapper.Map<Post>(post));
+			var result = await this.postsRepository.PostAsync(mapper.Map<Post>(post));
 
 			return Ok(result);
 		}

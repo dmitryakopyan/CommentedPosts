@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CommentedPosts.Interfaces;
 using CommentedPosts.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,9 @@ namespace CommentedPosts.Repositories
 		}
 
 		// GET api/posts
-		public IEnumerable<Post> GetAll()
+		public async Task<IEnumerable<Post>> GetAllAsync()
 		{
-			return context.Posts.ToList();
+			return await context.Posts.ToListAsync();
 		}
 
 		// GET api/posts/5
@@ -33,11 +34,11 @@ namespace CommentedPosts.Repositories
 		}
 
 		// POST api/posts
-		public int Post([FromBody] Post post)
+		public async Task<int> PostAsync([FromBody] Post post)
 		{
 			post.DateTime = clock.GetTime();
-			context.Add(post);
-			context.SaveChanges();
+			await context.AddAsync(post);
+			await context.SaveChangesAsync();
 
 			return post.Id;
 		}
