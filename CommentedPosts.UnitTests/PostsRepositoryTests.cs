@@ -16,7 +16,7 @@ namespace CommentedPosts.UnitTests
 	{
 		private const string CurrentUser = "CurrentUser";
 
-		private IPostsRepository controller;
+		private IPostsRepository repository;
 
 		private Mock<CommentedPostsDbContext> mockContext;
 
@@ -36,7 +36,7 @@ namespace CommentedPosts.UnitTests
 			mockClock.Setup(x => x.GetTime()).Returns(CurrentTime);
 
 			mockContext = new Mock<CommentedPostsDbContext>();
-			controller = new PostsRepository(mockContext.Object, mockClock.Object);
+			repository = new PostsRepository(mockContext.Object, mockClock.Object);
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace CommentedPosts.UnitTests
 			mockContext.Setup(x => x.SaveChanges());
 
 			// act
-			int result = controller.Post(post);
+			int result = repository.Post(post);
 
 			// assert
 			mockContext.VerifyAll();
@@ -78,7 +78,7 @@ namespace CommentedPosts.UnitTests
 			mockContext.Setup(x => x.SaveChanges());
 
 			// act
-			controller.Put(postId, new Post() { Id = postId, Content = "NewComment", Title = "NewTitle" });
+			repository.Put(postId, new Post() { Id = postId, Content = "NewComment", Title = "NewTitle" });
 
 			// assert
 			mockContext.VerifyAll();
@@ -105,7 +105,7 @@ namespace CommentedPosts.UnitTests
 			mockContext.Setup(x => x.SaveChanges());
 
 			// act
-			controller.Delete(postId);
+			repository.Delete(postId);
 
 			// assert
 			mockContext.VerifyAll();
