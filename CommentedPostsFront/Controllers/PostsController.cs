@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using AutoMapper;
 using CommentedPostsFront.Models;
+using CommentedPostsFront.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,15 +15,18 @@ namespace CommentedPostsFront.Controllers
 	{
 		private const string UriString = "https://localhost:44368/";
 
-		public PostsController()
+		private IMapper mapper;
+
+		public PostsController(IMapper mapper)
 		{
+			this.mapper = mapper;
 		}
 
 		// GET api/posts
 		[HttpGet]
 		public IActionResult Index()
 		{
-			IEnumerable<Post> students = null;
+			IEnumerable<Post> posts = null;
 
 			using (var client = GetHttpClient())
 			{
@@ -36,16 +41,16 @@ namespace CommentedPostsFront.Controllers
 					var readTask = result.Content.ReadAsStringAsync();
 					readTask.Wait();
 
-					students = JsonConvert.DeserializeObject<List<Post>>(readTask.Result);
+					posts = JsonConvert.DeserializeObject<List<Post>>(readTask.Result);
 				}
 				else
 				{
-					students = Enumerable.Empty<Post>();
+					posts = Enumerable.Empty<Post>();
 
 					ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
 				}
 			}
-			return View(students);
+			return View(mapper.Map<IEnumerable<PostViewModel>>(posts));
 		}
 
 		private static HttpClient GetHttpClient()
@@ -78,7 +83,7 @@ namespace CommentedPostsFront.Controllers
 
 		// GET api/posts/5
 		[HttpGet]
-		public Post Get(int id)
+		public PostViewModel Get(int id)
 		{
 			Post post;
 
@@ -104,18 +109,19 @@ namespace CommentedPostsFront.Controllers
 					ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
 				}
 			}
-			return post;
+			return mapper.Map<PostViewModel>(post);
 		}
 
 		// POST api/posts
 		[HttpPost]
-		public IActionResult Create(Post post)
+		public IActionResult Create(PostViewModel post)
 		{
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var json = JsonConvert.SerializeObject(post);
+				var model = mapper.Map<Post>(post);
+				var json = JsonConvert.SerializeObject(model);
 				var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
 
 				var responseTask = client.PostAsync("posts", content);
@@ -135,13 +141,14 @@ namespace CommentedPostsFront.Controllers
 
 		// PUT api/posts/5
 		[HttpPost]
-		public IActionResult Edit(int id, Post post)
+		public IActionResult Edit(int id, PostViewModel post)
 		{
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var json = JsonConvert.SerializeObject(post);
+				var model = mapper.Map<Post>(post);
+				var json = JsonConvert.SerializeObject(model);
 				var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
 
 				var responseTask = client.PutAsync("posts/" + post.Id, content);

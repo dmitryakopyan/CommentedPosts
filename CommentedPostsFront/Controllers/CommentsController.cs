@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using AutoMapper;
 using CommentedPostsFront.Models;
+using CommentedPostsFront.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,8 +15,11 @@ namespace CommentedPostsFront.Controllers
 	{
 		private const string UriString = "https://localhost:44368/";
 
-		public CommentsController()
+		private IMapper mapper;
+
+		public CommentsController(IMapper mapper)
 		{
+			this.mapper = mapper;
 		}
 
 		private static HttpClient GetHttpClient()
@@ -41,7 +46,7 @@ namespace CommentedPostsFront.Controllers
 
 		// GET api/posts/5
 		[HttpGet]
-		public Comment Get(int id)
+		public CommentViewModel Get(int id)
 		{
 			Comment comment;
 
@@ -67,18 +72,19 @@ namespace CommentedPostsFront.Controllers
 					ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
 				}
 			}
-			return comment;
+			return mapper.Map<CommentViewModel>(comment);
 		}
 
 		// POST api/posts
 		[HttpPost]
-		public IActionResult Add(int postId, Comment comment)
+		public IActionResult Add(int postId, CommentViewModel comment)
 		{
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var json = JsonConvert.SerializeObject(comment);
+				var model = mapper.Map<CommentViewModel>(comment);
+				var json = JsonConvert.SerializeObject(model);
 				var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
 
 				var responseTask = client.PostAsync("comments/" + postId, content);
@@ -98,13 +104,14 @@ namespace CommentedPostsFront.Controllers
 
 		// PUT api/posts/5
 		[HttpPost]
-		public IActionResult Edit(int id, int postId, Comment comment)
+		public IActionResult Edit(int id, int postId, CommentViewModel comment)
 		{
 			using (var client = GetHttpClient())
 			{
 				client.BaseAddress = new Uri(UriString);
 
-				var json = JsonConvert.SerializeObject(comment);
+				var model = mapper.Map<CommentViewModel>(comment);
+				var json = JsonConvert.SerializeObject(model);
 				var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
 
 				var responseTask = client.PutAsync("comments/" + comment.ID, content);

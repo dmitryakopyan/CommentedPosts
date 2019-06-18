@@ -9,25 +9,14 @@ namespace CommentedPostsFront.Models
 	{
 		public int Id { get; set; }
 
-		[DisplayName("Posted by")]
 		public string Author { get; set; }
 
-		[Required]
-		[MaxLength(50)]
 		public string Title { get; set; }
 
-		[Required]
-		[MaxLength(2000)]
 		public string Content { get; set; }
 
-		[DisplayName("Posted at")]
 		public DateTime DateTime { get; set; }
 
 		public IList<Comment> Comments { get; set; }
-
-		public string ContentTrimmed
-		{
-			get { return Content.Length > 50 ? Content.Substring(0, 50) + "..." : Content; }
-		}
 	}
 }
